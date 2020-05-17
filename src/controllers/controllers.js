@@ -35,7 +35,31 @@ export const getProductWithID = (req, res) => {
             Product.findById(req.params.ProductID, (err, Product) => {
                 if (err) return console.error(err);
                 res.json(Product);
-            })
+            });
+        }
+    });
+}
+
+export const updateProduct = (req, res) => {
+    req.body.validate(function (err) {
+        if (err) console.log(err);
+        else {
+            Product.findOneAndUpdate({ _id: req.params.ProductID }, req.body, { new: true, useFindAndModify: false }, (err, Product) => {
+                if (err) return console.error(err);
+                res.json(Product);
+            });
+        }
+    });
+}
+
+export const deleteProduct = (req, res) => {
+    req.body.validate(function (err) {
+        if (err) console.log(err);
+        else {
+            Product.deleteOne({ _id: req.params.ProductID}, (err, Product) => {
+                if (err) return console.error(err);
+                res.json({ message: 'successfully deleted product' });
+            });
         }
     });
 }
