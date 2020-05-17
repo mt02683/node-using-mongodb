@@ -1,15 +1,15 @@
 import mongoose from 'mongoose'
-import ProductSchema from '../models/models.js'
+import { ProductSchema } from '../models/models.js'
 
 var Product = mongoose.model('Product', ProductSchema);
 
 export const addnewProduct = (req, res) => {
-    newProduct = new Product(req.body);
+    var newProduct = new Product(req.body);
     newProduct.validate(function (err) {
-        if (err) console.log(err);
+        if (err) console.log("add new product input error: " + err);
         else {
             newProduct.save((err, Product) => {
-                if (err) return console.error(err);
+                if (err) return console.error("saving new product error: " + err);
                 res.json(Product)
             });
         }
@@ -17,49 +17,29 @@ export const addnewProduct = (req, res) => {
 }
 
 export const getProducts = (req, res) => {
-    req.body.validate(function (err) {
-        if (err) console.log(err);
-        else {
-            Product.find({}, (err, Product) => {
-                if (err) return console.error(err);
-                res.json(Product);
-            });
-        }
+    Product.find({}, (err, Product) => {
+        if (err) return console.error("can't get all products error: " + err);
+        res.json(Product);
     });
 }
 
 export const getProductWithID = (req, res) => {
-    req.body.validate(function (err) {
-        if (err) console.log(err);
-        else {
-            Product.findById(req.params.ProductID, (err, Product) => {
-                if (err) return console.error(err);
-                res.json(Product);
-            });
-        }
+    Product.findById(req.params.ProductID, (err, Product) => {
+        if (err) return console.error("can't find product with id error: " + err);
+        res.json(Product);
     });
 }
 
 export const updateProduct = (req, res) => {
-    req.body.validate(function (err) {
-        if (err) console.log(err);
-        else {
-            Product.findOneAndUpdate({ _id: req.params.ProductID }, req.body, { new: true, useFindAndModify: false }, (err, Product) => {
-                if (err) return console.error(err);
-                res.json(Product);
-            });
-        }
+    Product.findOneAndUpdate({ _id: req.params.ProductID }, req.body, { new: true, useFindAndModify: false }, (err, Product) => {
+        if (err) return console.error(err);
+        res.json(Product);
     });
 }
 
 export const deleteProduct = (req, res) => {
-    req.body.validate(function (err) {
-        if (err) console.log(err);
-        else {
-            Product.deleteOne({ _id: req.params.ProductID}, (err, Product) => {
-                if (err) return console.error(err);
-                res.json({ message: 'successfully deleted product' });
-            });
-        }
+    Product.deleteOne({ _id: req.params.ProductID}, (err, Product) => {
+        if (err) return console.error(err);
+        res.json({ message: 'successfully deleted product' });
     });
 }
