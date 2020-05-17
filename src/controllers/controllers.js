@@ -15,3 +15,27 @@ export const addnewProduct = (req, res) => {
         }
     });
 }
+
+export const getProducts = (req, res) => {
+    req.body.validate(function (err) {
+        if (err) console.log(err);
+        else {
+            Product.find({}, (err, Product) => {
+                if (err) return console.error(err);
+                res.json(Product);
+            });
+        }
+    });
+}
+
+export const getProductWithID = (req, res) => {
+    req.body.validate(function (err) {
+        if (err) console.log(err);
+        else {
+            Product.findById(req.params.ProductID, (err, Product) => {
+                if (err) return console.error(err);
+                res.json(Product);
+            })
+        }
+    });
+}
